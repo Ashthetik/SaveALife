@@ -1,0 +1,10 @@
+{
+  "name": "savealife",
+  "version": "0.0.1",
+  "description": "Inspured by the #SaveALife Project, [Project Name] provides rapid response to possible suicidal persons and helps educate communities and community leaders about supporting people and coping with personal issues.",
+  "main": "dist/main.js",
+  "repository": "https://github.com/Ashthetik/SaveALife",
+  "author": "Ashley Reid (Ashthetik)",
+  "license": " CC0-1.0 license",
+  "private": false
+}
