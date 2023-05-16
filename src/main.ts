@@ -5,7 +5,8 @@ import { config } from 'dotenv';
 import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import { userRouter } from './routes/router';
+import { userRouter } from './routes/userRouter.router';
+import messageRouter from './routes/message.router';
 import { errorHandler } from './middlewares/error.middleware';
 import { notFoundHandler } from './middlewares/404.middleware';
 
@@ -28,7 +29,9 @@ const app: Application = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-app.use("/v1", userRouter);
+app.use("/v1", [
+	userRouter, messageRouter
+]);
 app.use(errorHandler);
 app.use(notFoundHandler);
 
