@@ -5,22 +5,17 @@ import { config } from 'dotenv';
 import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import { userRouter } from './routes/userRouter.router';
-import messageRouter from './routes/message.router';
-import { errorHandler } from './middlewares/error.middleware';
-import { notFoundHandler } from './middlewares/404.middleware';
+import { expressjwt as jwt } from 'express-jwt';
+import { createServer as http } from "http";
+import { createServer as https } from 'https';
+import { saveError, secretGenerator } from './common/globals';
+import { readFileSync } from 'fs';
 
 config();
 
 /**
  * App Variables
  */
-if (!process.env.PORT) {
-	console.log('[WARN] Error to get ports, defaulting to 5000');
-	process.env.PORT = '5000';
-}
-
-const PORT: number = parseInt(process.env.PORT as string, 10);
 const app: Application = express();
 
 /**
@@ -29,16 +24,47 @@ const app: Application = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-app.use("/v1", [
-	userRouter, messageRouter
-]);
-app.use(errorHandler);
-app.use(notFoundHandler);
+app.use(express.urlencoded({ extended: true }));
+app.use(jwt({
+	"secret": secretGenerator(),
+	"algorithms": ["HS256"],
+	"credentialsRequired": false,
+}));
+require("./router")(app);
+
+/**
+ * Configure Accepted Headers
+ */
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Auth-Token");
+    next();
+});
 
 /**
  * Server Configuration
  * And Activations
  */
-app.listen(PORT, () => {
-	console.log(`[INFO] Server is running on port ${PORT}`);
+const creds = {
+	key: readFileSync("./src/certs/key.pem", "utf-8"),
+	cert: readFileSync("./src/certs/cert.pem", "utf-8")
+};
+
+const secureServer = https(creds, app);
+const baseServer = http(app);
+
+secureServer.listen(443, () => {
+	console.log(`[INFO] [HTTPS] Server is running on port 443`);
+});
+
+baseServer.listen(80, () => {
+	console.log(`[INFO] [HTTP] Server is running on port 80`);
+});
+
+// Handle unhandled promise rejections
+process.on("unhandledRejection", (err) => {
+    console.log(`Unhandled rejection: ${err}`);
+    // Send error to error logging service
+    saveError(err);
 });
