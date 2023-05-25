@@ -4,7 +4,6 @@
 import { User } from "../interfaces/DTO/user.dto";
 import DatabaseHandler from "../database/data.handler";
 const db = new DatabaseHandler();
-
 /**
  * Service Methods
  */
