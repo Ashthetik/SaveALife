@@ -238,6 +238,8 @@ export default class Predict {
             image = url.slice(0, url.indexOf("/"));
             image = image.slice(url.length, -4)
         }
+        const header = res.headers["content-type"].replace(/\n|\r/g, "");
+        const length = res.headers["content-length"].replace(/\n|\r/g, "");
         let fn = `${image}.jpg`;
         (await request).head(url, async (e, res) => {
             if (e) {
@@ -245,14 +247,14 @@ export default class Predict {
             }
             console.log(`\
             [INFO] Download->URL : ${url}\n \
-            [INFO] Download->Content_Type : ${res.headers["content-type"]}\n \
-            [INFO] Download->Content_Length : ${res.headers["content-length"]} \
+            [INFO] Download->Content_Type : ${header}\n \
+            [INFO] Download->Content_Length : ${length} \
             `);
             if (res.headers["Content-Length"] > (5 * 1000000)) {
                 console.log(`\
                 [ERROR] Download->URL : ${url}\n \
-                [ERROR] Download->Content_Type : ${res.headers["content-type"]}\n \
-                [ERROR] Download->Content_Length : ${res.headers["content-length"]} \
+                [ERROR] Download->Content_Type : ${header}\n \
+                [ERROR] Download->Content_Length : ${length} \
                 [ERROR] Download->Message : File_Size_Too_Big \
                 `);
                 return false;

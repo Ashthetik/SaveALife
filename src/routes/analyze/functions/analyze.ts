@@ -11,7 +11,7 @@ export default async function analyzer(
 	res: Response
 ) {
 	// Get the image from the request
-	let image = req.body.image || req.on('data', (chunk) => {
+	let image = req.on('data', (chunk) => {
 		image += chunk;
 	});
 

@@ -22,7 +22,7 @@ export const sanitize = (input: string): string => {
 
 	// List of patterns to remove or replace
 	const patterns = [
-		/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+		/<script\b[^>]*>([\s\S]*?)<\/script>/gi,
 		/<[^>]*>?/gm,
 		/<\/?[^>]+(>|$)/g,
 		/javascript:/gi,
@@ -62,8 +62,10 @@ export const findENotation = (num: number): number => {
  * @returns {string}
  */
 export const secretGenerator = (): string => {
-	const secret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-	return secret;
+	const secret = require("crypto").getRandomValues(new Uint32Array(36));
+    const secureSecret = require("crypto").createHash("sha256").update(secret).digest("hex");
+
+	return secureSecret;
 };
 
 /**
