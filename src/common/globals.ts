@@ -22,9 +22,9 @@ export const sanitize = (input: string): string => {
 
 	// List of patterns to remove or replace
 	const patterns = [
-		/<script\b[^>]*>([\s\S]*?)<\/script>/gi,
-		/<[^>]*>?/gm,
-		/<\/?[^>]+(>|$)/g,
+		/<script\b[^>]*>([\s\S]*?)<\/script[\s\S]*>/gi,
+		/<[^>]*>?/gmi,
+		/<\/?[^>]+(>|$)/gi,
 		/javascript:/gi,
 		/on\w+="[^"]*"/gi,
 		/on\w+='[^']*'/gi,
