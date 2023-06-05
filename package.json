@@ -21,7 +21,7 @@
     "mysql2": "^3.3.2",
     "mysql3": "^0.6.0",
     "openai": "^3.2.1",
-    "sequelize": "^6.31.1",
+    "sequelize": "^6.32.0",
     "sqlite3": "^5.1.6"
   },
   "devDependencies": {
