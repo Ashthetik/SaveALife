@@ -18,7 +18,7 @@
     "express-jwt": "^8.4.1",
     "express-validator": "^7.0.1",
     "helmet": "^7.0.0",
-    "mysql2": "^3.3.4",
+    "mysql2": "^3.6.1",
     "mysql3": "^0.6.0",
     "openai": "^3.2.1",
     "sequelize": "^6.32.1",
